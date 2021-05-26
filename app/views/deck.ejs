@@ -1,0 +1,28 @@
+<%- include('header') %>
+
+<h1>Le deck</h1>
+
+
+<% for (const card of deck) {%>
+
+        <img  src="/visuals/<%= card.name%>.jpg" alt="<%= card.name %>">
+        <div >
+            <h5 class="item-title"><%= card.name %></h5>
+        </div>
+
+    
+
+
+        <a href="/deck/delete/<%= card.id %>">Enlever de la liste</a>
+    
+
+  <%}%>
+      
+
+
+
+ 
+</div>
+
+
+<%- include('footer') %>
