@@ -9,7 +9,11 @@ const deckController = require('./controllers/deckController');
 
 router.get('/', mainController.homePage);
 router.get('/search', searchController.searchPage);
-//router.get('/search/element/:element', searchController.searchCardByElement);
+router.get('/search/element/', searchController.searchCardByElement);
+router.get('/search/level/', searchController.searchCardByLevel);
+router.get('/search/values/', searchController.searchCardByValue);
+router.get('/search/name/', searchController.searchCardByName);
+
 
 
 router.get('/card/:id', cardController.getOneCard);

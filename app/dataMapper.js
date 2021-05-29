@@ -29,17 +29,63 @@ const dataMapper = {
     })
   },
 
-  searchCardWithElement: (cardCallback) => {
-    const preparedQuery = {
-      text: 'SELECT * FROM card WHERE card.element=$1',
-      values: [element]
+  searchCardWithElement: (element, cardCallback) => {
+    let query;
+    if (element === 'null')
+    query = {
+      text: `SELECT * FROM "card" WHERE "element" IS NULL`
+    };
+    else 
+    query = {
+      text : `SELECT * FROM "card" WHERE "element"=$1`,
+        values: [element]
     }
-    database.query(preparedQuery, (error, result) => {
+    
+    database.query(query, (error, result) => {
       if (error) {
         cardCallback(error)
       } else {
         const elementFind = result.rows;
         cardCallback(null, elementFind)
+      }
+    })
+  },
+
+  searchCardWithLevel: (level, callback) => {
+    database.query('SELECT * FROM card WHERE level=$1', [level], (error, result) => {
+      if (error) {
+        callback(error)
+      } else {
+        callback(null, result.rows)
+      }
+    })
+  },
+
+  searchCardWithValue: (direction, value, callback) => {
+    const query = {
+      text : `SELECT * FROM "card" WHERE 
+      $1 = 'north' AND value_north >= $2
+      OR $1 = 'south' AND value_south >= $2
+      OR $1 = 'east' AND value_east >= $2
+      OR $1 = 'west' AND value_west >= $2`,
+      values: [direction, value]
+    };
+    
+    database.query(query, (error, result) => {
+      if (error) {
+        callback(error);
+      } else {
+        callback(null, result.rows);
+      }
+    })
+  },
+
+  searchWithName: (name, callback) => {
+    database.query('SELECT * FROM card WHERE name ILIKE $1', [`%${name}%`], (error, result) => {
+      if (error) {
+        callback(error);
+      } else {
+        callback(null, result.rows);
       }
     })
   }
